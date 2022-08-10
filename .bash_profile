@@ -57,6 +57,16 @@ sqlmap(){
 python ~/tools/sqlmap*/sqlmap.py -u $1 
 }
 
+#Time Blind SQL Injection detection with FFUF
+## NEEDS TO REPLACE THE PAYLOAD PATH ACCORDING TO YOU (5 Seconds)
+BSQLI(){
+for i in $(cat ~/PathToPayloads/BlindSQLI.txt) ; do
+  cat $1 | qsreplace "$i" > .sql
+  ffuf -u FUZZ -w .sql -s -ft "<5000" | tee -a vulnSqli.txt
+  rm .sql
+done
+}
+
 ncx(){
 nc -l -n -vv -p $1 -k
 }
